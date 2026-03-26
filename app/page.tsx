@@ -5,6 +5,7 @@ import { useHome } from "@/features/home/application/hooks/useHome"
 import { HomeAlphaTopPicks } from "@/app/components/HomeAlphaTopPicks"
 import { HomeSentimentGauge } from "@/app/components/HomeSentimentGauge"
 import { HomeTodayBriefing } from "@/app/components/HomeTodayBriefing"
+import { SharedCardFeed } from "@/features/share/ui/components/SharedCardFeed"
 
 function Skeleton() {
     return (
@@ -77,22 +78,7 @@ export default function Home() {
                 </div>
             )}
 
-            {(state.status === "READY" || state.status === "EMPTY") && (
-                <div className="mt-6 flex gap-3">
-                    <Link
-                        href="/dashboard"
-                        className="flex-1 rounded-full border border-gray-300 py-2 text-center text-sm font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-800"
-                    >
-                        대시보드
-                    </Link>
-                    <Link
-                        href="/watchlist"
-                        className="flex-1 rounded-full border border-gray-300 py-2 text-center text-sm font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-800"
-                    >
-                        관심종목
-                    </Link>
-                </div>
-            )}
+            <SharedCardFeed />
         </main>
     )
 }

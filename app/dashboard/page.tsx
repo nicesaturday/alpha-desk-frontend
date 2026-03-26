@@ -5,12 +5,15 @@ import { useDashboard } from "@/features/dashboard/application/hooks/useDashboar
 import { excludeCurrentSummaryFromLogs } from "@/features/dashboard/domain/excludeCurrentSummaryFromLogs"
 import { useDailyReturnsHeatmap } from "@/features/stock/application/hooks/useDailyReturnsHeatmap"
 import { useWatchlist } from "@/features/watchlist/application/hooks/useWatchlist"
+import { useAuth } from "@/features/auth/application/hooks/useAuth"
 import { DashboardAnalysisLogsSection } from "./components/DashboardAnalysisLogsSection"
 import { DashboardPipelineResult } from "./components/DashboardPipelineResult"
 import { DashboardSummarySection } from "./components/DashboardSummarySection"
 import { DashboardWatchlistSection } from "./components/DashboardWatchlistSection"
 
 export default function DashboardPage() {
+    const { state: authState } = useAuth()
+    const isLoggedIn = authState.status === "AUTHENTICATED"
     const {
         summaries,
         reportSummaries,
@@ -158,6 +161,7 @@ export default function DashboardPage() {
                 progressEvents={progressEvents}
                 heatmapBySymbol={heatmapBySymbol}
                 heatmapWeeks={heatmapData?.weeks ?? 6}
+                isLoggedIn={isLoggedIn}
             />
 
             <DashboardAnalysisLogsSection

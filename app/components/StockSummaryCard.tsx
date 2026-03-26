@@ -1,6 +1,8 @@
 'use client'
 
 import type { HeatmapItem } from '@/features/stock/domain/model/dailyReturnsHeatmap'
+import { ShareActionBar } from '@/features/share/ui/components/ShareActionBar'
+import type { ShareCardPayload } from '@/features/share/domain/model/sharedCard'
 import { StockDailyReturnsHeatmap } from './StockDailyReturnsHeatmap'
 
 type Tag = string | { label: string; category?: string }
@@ -17,6 +19,10 @@ interface StockSummaryCardProps {
   url?: string;
   /** BL-FE-30/34: 일별 등락 히트맵(선택). asOf 생략 시 종목 시리즈 마지막 거래일 사용 */
   heatmap?: { item: HeatmapItem; weeks: number; asOf?: string | null };
+  /** BL-FE-43: 공유 기능. analyzed_at 제공 시 액션 바 표시 */
+  analyzed_at?: string;
+  isLoggedIn?: boolean;
+  source_type?: string;
 }
 
 const SOURCE_LABEL: Record<string, string> = {
@@ -54,12 +60,16 @@ export default function StockSummaryCard({
   source_type,
   url,
   heatmap,
+  analyzed_at,
+  isLoggedIn = false,
+  source_type = 'NEWS',
 }: StockSummaryCardProps) {
-  const cardClass =
-    'border border-gray-200 dark:border-gray-700 rounded-xl p-5 flex flex-col gap-3 bg-background' +
-    (url ? ' cursor-pointer hover:border-blue-400 hover:shadow-md transition-all' : '');
+  const wrapperClass =
+    'border border-gray-200 dark:border-gray-700 rounded-xl bg-background flex flex-col' +
+    (url ? ' hover:border-blue-400 hover:shadow-md transition-all' : '');
 
-  const inner = (
+  // url이 있을 때 링크로 연결될 내용부 (액션 바 제외)
+  const linkableContent = (
     <>
       {/* 종목명 + 출처 배지 + 감성 배지 */}
       <div className="flex items-center justify-between">
@@ -82,7 +92,7 @@ export default function StockSummaryCard({
         )}
       </div>
 
-      {/* 요약 텍스트 — 히트맵보다 먼저 두어 본문 맥락을 먼저 읽도록 (BL-FE-30 UX) */}
+      {/* 요약 텍스트 */}
       <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">{summary}</p>
 
       {heatmap && (
@@ -128,13 +138,44 @@ export default function StockSummaryCard({
     </>
   );
 
-  if (url) {
-    return (
-      <a href={url} target="_blank" rel="noopener noreferrer" className={cardClass}>
-        {inner}
-      </a>
-    );
-  }
+  // 액션 바는 항상 링크 바깥에 위치 (클릭 시 원문 링크로 이동하지 않음)
+  const actionBar = analyzed_at ? (
+    <div className="px-5 pb-4">
+      <ShareActionBar
+        sharePayload={{
+          symbol,
+          name,
+          summary,
+          tags: tags.map(tagLabel),
+          sentiment: sentiment ?? 'NEUTRAL',
+          sentiment_score: sentiment_score ?? 0,
+          confidence: confidence ?? 0,
+          source_type,
+          url,
+          analyzed_at,
+        } satisfies ShareCardPayload}
+        isLoggedIn={isLoggedIn}
+      />
+    </div>
+  ) : null;
 
-  return <div className={cardClass}>{inner}</div>;
+  return (
+    <div className={wrapperClass}>
+      {url ? (
+        <a
+          href={url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex flex-col gap-3 p-5 cursor-pointer"
+        >
+          {linkableContent}
+        </a>
+      ) : (
+        <div className="flex flex-col gap-3 p-5">
+          {linkableContent}
+        </div>
+      )}
+      {actionBar}
+    </div>
+  );
 }

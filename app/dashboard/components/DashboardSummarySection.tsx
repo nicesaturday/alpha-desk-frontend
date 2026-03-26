@@ -19,6 +19,7 @@ type Props = {
     progressEvents: PipelineProgressEvent[]
     heatmapBySymbol?: Record<string, HeatmapItem>
     heatmapWeeks?: number
+    isLoggedIn?: boolean
 }
 
 export function DashboardSummarySection({
@@ -30,6 +31,7 @@ export function DashboardSummarySection({
     progressEvents,
     heatmapBySymbol,
     heatmapWeeks = 6,
+    isLoggedIn = false,
 }: Props) {
     const [activeTab, setActiveTab] = useState<Tab>("news")
     const activeSummaries = activeTab === "news" ? summaries : reportSummaries
@@ -127,6 +129,9 @@ export function DashboardSummarySection({
                                     source_type={stock.source_type}
                                     url={stock.url}
                                     heatmap={hi ? { item: hi, weeks: heatmapWeeks } : undefined}
+                                    analyzed_at={stock.analyzed_at}
+                                    source_type={stock.source_type}
+                                    isLoggedIn={isLoggedIn}
                                 />
                             )
                         })}

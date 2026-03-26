@@ -23,6 +23,7 @@ export interface StockSummary {
     confidence: number
     source_type?: 'NEWS' | 'DISCLOSURE' | 'REPORT'
     url?: string
+    analyzed_at?: string
 }
 
 export interface AnalysisLog {

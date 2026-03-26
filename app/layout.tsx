@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import NavBar from "@/components/NavBar";
+import Navbar from "@/ui/layout/Navbar";
 import JotaiProvider from "@/components/JotaiProvider";
 import AuthProvider from "@/components/AuthProvider";
 
@@ -32,8 +32,8 @@ export default function RootLayout({
       >
         <JotaiProvider>
           <AuthProvider>
-            <NavBar />
-            <main className="pt-14">
+            <Navbar />
+            <main>
               {children}
             </main>
           </AuthProvider>
