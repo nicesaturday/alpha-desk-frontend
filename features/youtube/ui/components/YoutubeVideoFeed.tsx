@@ -5,24 +5,45 @@ import { useWatchlist } from "@/features/watchlist/application/hooks/useWatchlis
 import { useYoutubeList } from "../../application/hooks/useYoutubeList"
 import { YoutubeVideoCard } from "./YoutubeVideoCard"
 
+type SortOrder = "desc" | "asc"
+
 export function YoutubeVideoFeed() {
     const { items: watchlistItems } = useWatchlist()
     const [selectedName, setSelectedName] = useState<string | undefined>(undefined)
+    const [sortOrder, setSortOrder] = useState<SortOrder>("desc")
 
     const activeStock = selectedName ?? watchlistItems[0]?.name
 
-    const { items, nextPageToken, prevPageToken, totalResults, isLoading, error, goNext, goPrev } =
+    const { items: rawItems, nextPageToken, prevPageToken, totalResults, isLoading, error, goNext, goPrev } =
         useYoutubeList(activeStock)
+
+    const items = [...rawItems].sort((a, b) => {
+        const diff = new Date(a.published_at).getTime() - new Date(b.published_at).getTime()
+        return sortOrder === "desc" ? -diff : diff
+    })
 
     return (
         <main className="p-6 md:p-8">
-            <div className="mb-6 border-b border-outline pb-4">
-                <div className="font-headline font-bold text-on-surface text-xl uppercase tracking-tighter">
-                    VIDEOS
+            <div className="mb-6 border-b border-outline pb-4 flex items-end justify-between gap-4">
+                <div>
+                    <div className="font-headline font-bold text-on-surface text-xl uppercase tracking-tighter">
+                        VIDEOS
+                    </div>
+                    <div className="font-mono text-sm text-on-surface-variant mt-0.5">
+                        관심종목 관련 최신 유튜브 영상을 확인하세요.
+                    </div>
                 </div>
-                <div className="font-mono text-sm text-on-surface-variant mt-0.5">
-                    관심종목 관련 최신 유튜브 영상을 확인하세요.
-                </div>
+                <button
+                    type="button"
+                    onClick={() => setSortOrder((o) => (o === "desc" ? "asc" : "desc"))}
+                    className="flex items-center gap-1 border border-outline px-3 py-1.5 font-mono text-xs uppercase text-on-surface-variant hover:border-primary hover:text-primary transition-none shrink-0"
+                    title={sortOrder === "desc" ? "오래된순으로 변경" : "최신순으로 변경"}
+                >
+                    <span className="material-symbols-outlined text-[14px]">
+                        {sortOrder === "desc" ? "arrow_downward" : "arrow_upward"}
+                    </span>
+                    {sortOrder === "desc" ? "최신순" : "오래된순"}
+                </button>
             </div>
 
             {/* 관심종목 탭 */}
