@@ -1,8 +1,10 @@
 import { NextRequest } from "next/server"
 
-const BACKEND_URL = process.env.BACKEND_INTERNAL_URL ?? "http://localhost:33333"
+export const runtime = "nodejs"
+export const maxDuration = 60
 
 export async function POST(req: NextRequest) {
+    const BACKEND_URL = process.env.BACKEND_URL ?? "http://localhost:33333"
     const body = await req.text()
     const cookies = req.headers.get("cookie") ?? ""
 
