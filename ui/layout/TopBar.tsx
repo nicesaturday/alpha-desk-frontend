@@ -39,7 +39,7 @@ export default function TopBar() {
                     href="/"
                     className="text-lg font-black tracking-tighter text-inverse-primary font-headline uppercase"
                 >
-                    ALPHA_DESK
+                    ALPHA_TERMINAL
                 </Link>
 
                 <nav className="hidden md:flex items-center gap-4 font-headline uppercase tracking-tighter text-sm font-bold h-10">
