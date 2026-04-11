@@ -1,6 +1,7 @@
 "use client"
 
 import { Suspense, useEffect } from "react"
+
 import { useRouter, useSearchParams } from "next/navigation"
 import { useAuth } from "@/features/auth/application/hooks/useAuth"
 import { KakaoLoginButton } from "@/features/auth/ui/components/LoginButton"
@@ -19,31 +20,17 @@ export default function LoginPage() {
 }
 
 function LoginContent() {
-    const { state, loadUser } = useAuth()
+    const { state } = useAuth()
     const router = useRouter()
     const searchParams = useSearchParams()
     const reason = searchParams.get("reason")
     const expiredSignupSession = reason === "signup-session-expired"
 
     useEffect(() => {
-        loadUser()
-    }, [loadUser])
-
-    useEffect(() => {
         if (state.status === "AUTHENTICATED") {
             router.push("/")
         }
     }, [state.status, router])
-
-    if (state.status === "LOADING") {
-        return (
-            <div className="flex justify-center items-center h-full">
-                <span className="font-mono text-[11px] text-on-surface-variant uppercase tracking-widest animate-pulse">
-                    AUTH_VERIFY...
-                </span>
-            </div>
-        )
-    }
 
     if (state.status === "AUTHENTICATED") {
         return null

@@ -1,5 +1,5 @@
 import { httpClient } from "@/infrastructure/http/httpClient"
-import type { NewsSearchResponse } from "@/features/news/domain/model/newsArticle"
+import type { ArticleAnalysis, NewsSearchResponse, SaveArticleRequest, SaveArticleResponse, SavedArticleListResponse } from "@/features/news/domain/model/newsArticle"
 
 export async function searchNews(
     keyword: string,
@@ -14,5 +14,20 @@ export async function searchNews(
     })
     if (market) params.set("market", market)
     const res = await httpClient.get(`/news/search?${params.toString()}`)
+    return res.json()
+}
+
+export async function saveArticle(request: SaveArticleRequest): Promise<SaveArticleResponse> {
+    const res = await httpClient.post("/news/saved", request)
+    return res.json()
+}
+
+export async function fetchSavedArticles(): Promise<SavedArticleListResponse> {
+    const res = await httpClient.get("/news/saved")
+    return res.json()
+}
+
+export async function analyzeArticle(articleId: number): Promise<ArticleAnalysis> {
+    const res = await httpClient.get(`/news/saved/${articleId}/analysis`)
     return res.json()
 }
