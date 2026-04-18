@@ -79,6 +79,15 @@ export default function TopBar() {
                     </span>
                 )}
 
+                {isLoggedIn && (
+                    <Link
+                        href="/profile"
+                        className="border border-outline-variant font-mono text-[10px] text-inverse-on-surface px-2 py-0.5 hover:text-white hover:border-inverse-primary transition-none uppercase cursor-pointer"
+                    >
+                        PROFILE
+                    </Link>
+                )}
+
                 {isLoggedIn ? (
                     <button
                         type="button"

@@ -108,10 +108,9 @@ export default function Navbar() {
                         (isLoggedIn ? (
                             <>
                                 {state.status === "AUTHENTICATED" && (
-                                    <Link
-                                        href="/profile"
-                                        className="mr-3 hidden max-w-[14rem] flex-col items-end text-right break-keep md:flex hover:opacity-80 transition-opacity"
-                                        aria-label="프로필 페이지로 이동"
+                                    <div
+                                        className="mr-3 hidden max-w-[14rem] flex-col items-end text-right break-keep md:flex"
+                                        aria-label="로그인한 사용자"
                                     >
                                         <span className="text-[10px] font-medium uppercase tracking-wide text-gray-400">
                                             닉네임
@@ -127,8 +126,11 @@ export default function Navbar() {
                                                 {state.user.email}
                                             </span>
                                         ) : null}
-                                    </Link>
+                                    </div>
                                 )}
+                                <Link href="/profile" className={navbarStyles.loginButton}>
+                                    프로필
+                                </Link>
                                 <button
                                     type="button"
                                     onClick={handleLogout}
