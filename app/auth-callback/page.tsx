@@ -16,6 +16,8 @@ export default function AuthCallbackPage() {
                     nickname: result.nickname,
                     email: result.email,
                 })
+                document.cookie = `pending_nickname=${encodeURIComponent(result.nickname)}; path=/`
+                document.cookie = `pending_email=${encodeURIComponent(result.email)}; path=/`
                 router.replace(`/terms?${params}`)
             } else if (result.result === "authenticated") {
                 const path = await resolveLoginRedirect()

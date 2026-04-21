@@ -19,6 +19,7 @@ export default function TopBar() {
     const router = useRouter()
     const pathname = usePathname()
     const isLoggedIn = state.status === "AUTHENTICATED"
+    const isPendingTerms = state.status === "PENDING_TERMS"
 
     const handleLogout = useCallback(async () => {
         await logout()
@@ -35,7 +36,7 @@ export default function TopBar() {
                     ALPHA_TERMINAL
                 </Link>
 
-                <nav className="hidden md:flex items-center gap-4 font-headline uppercase tracking-tighter text-sm font-bold h-10">
+                {!isPendingTerms && <nav className="hidden md:flex items-center gap-4 font-headline uppercase tracking-tighter text-sm font-bold h-10">
                     {NAV_ITEMS.map(({ href, label, exact }) => (
                         <Link
                             key={label}
@@ -49,7 +50,7 @@ export default function TopBar() {
                             {label}
                         </Link>
                     ))}
-                </nav>
+                </nav>}
             </div>
 
             <div className="flex items-center gap-2">

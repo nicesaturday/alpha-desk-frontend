@@ -26,7 +26,14 @@ export function proxy(request: NextRequest) {
     const tempToken = request.cookies.get("temp_token")
 
     if (!accountId && tempToken) {
-        return NextResponse.redirect(new URL("/terms", request.url))
+        const pendingNickname = request.cookies.get("pending_nickname")?.value ?? ""
+        const pendingEmail = request.cookies.get("pending_email")?.value ?? ""
+        const params = new URLSearchParams()
+        if (pendingNickname) params.set("nickname", pendingNickname)
+        if (pendingEmail) params.set("email", pendingEmail)
+        const termsUrl = new URL("/terms", request.url)
+        if (params.toString()) termsUrl.search = params.toString()
+        return NextResponse.redirect(termsUrl)
     }
 
     if (!accountId) {
