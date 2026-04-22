@@ -1,7 +1,5 @@
 'use client'
 
-import { useEffect } from 'react'
-import { useRouter } from 'next/navigation'
 import { useAtomValue } from 'jotai'
 import { authStateAtom } from '@/features/auth/application/atoms/authAtom'
 import { useWatchlist } from '@/features/watchlist/application/hooks/useWatchlist'
@@ -40,18 +38,8 @@ function OnboardingGuide() {
 
 export default function MyPage() {
     const authState = useAtomValue(authStateAtom)
-    const router = useRouter()
     const { items: watchlistItems, isLoading: isWatchlistLoading } = useWatchlist()
     const isNewUser = !isWatchlistLoading && watchlistItems.length === 0
-
-    useEffect(() => {
-        if (authState.status === 'UNAUTHENTICATED') {
-            router.replace('/login')
-        }
-        if (authState.status === 'PENDING_TERMS') {
-            router.replace('/terms')
-        }
-    }, [authState.status, router])
 
     if (authState.status === 'LOADING') {
         return (
