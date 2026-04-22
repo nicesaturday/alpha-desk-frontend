@@ -8,6 +8,7 @@ import type { AuthUser } from "../../domain/model/authUser"
 import type { AuthState } from "../../domain/state/authState"
 
 export function redirectOAuthLogin() {
+    if (typeof window === "undefined") return
     window.location.href = `${env.apiBaseUrl}${env.kakaoLoginPath}`
 }
 
@@ -34,6 +35,7 @@ export async function logoutUser(): Promise<void> {
 }
 
 function clearAuthCookies() {
+    if (typeof document === "undefined") return
     for (const name of ["nickname", "email", "account_id"]) {
         document.cookie = `${name}=; Max-Age=0; path=/`
     }
