@@ -2,8 +2,6 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { useIsAdmin } from "@/features/admin/application/hooks/useIsAdmin"
-import { useAuth } from "@/features/auth/application/hooks/useAuth"
 
 const NAV_GROUPS = [
     {
@@ -16,24 +14,17 @@ const NAV_GROUPS = [
         items: [
             { href: "/dashboard", label: "DASHBOARD", icon: "show_chart" },
             { href: "/market-feed", label: "MARKET_FEED", icon: "feed" },
-            { href: "/news", label: "NEWS", icon: "newspaper" },
-            { href: "/watchlist", label: "WATCHLIST", icon: "visibility" },
         ],
     },
     {
         label: "AI_INVEST",
         items: [
             { href: "/ai-insight", label: "AI_INSIGHT", icon: "auto_awesome" },
-            { href: "/invest", label: "INVEST", icon: "trending_up" },
-            { href: "/stock-recommendation", label: "PICKS", icon: "recommend" },
-            { href: "/stock-theme", label: "THEMES", icon: "category" },
         ],
     },
     {
-        label: "COMMUNITY",
         items: [
             { href: "/board", label: "BOARD", icon: "forum" },
-            { href: "/youtube", label: "YOUTUBE", icon: "play_circle" },
         ],
     },
 ]
@@ -42,15 +33,8 @@ const SETTINGS_ITEMS = [
     { href: "/my", label: "MY_PAGE", icon: "person" },
 ]
 
-const ADMIN_ITEMS = [
-    { href: "/admin", label: "ADMIN", icon: "admin_panel_settings" },
-]
-
 export default function SideBar() {
     const pathname = usePathname()
-    const { state } = useAuth()
-    const isLoggedIn = state.status === "AUTHENTICATED"
-    const isAdmin = useIsAdmin()
 
     const isActive = (href: string, exact?: boolean) =>
         exact ? pathname === href : pathname === href || pathname.startsWith(href + "/")
@@ -102,13 +86,6 @@ export default function SideBar() {
                 {SETTINGS_ITEMS.map(({ href, label, icon }) => (
                     <NavLink key={href} href={href} label={label} icon={icon} />
                 ))}
-                {isLoggedIn && isAdmin === true && (
-                    <div className="border-t border-outline">
-                        {ADMIN_ITEMS.map(({ href, label, icon }) => (
-                            <NavLink key={href} href={href} label={label} icon={icon} />
-                        ))}
-                    </div>
-                )}
             </div>
 
             <div className="p-3 pb-8 border-t border-outline font-mono text-[9px] text-on-surface-variant leading-relaxed">

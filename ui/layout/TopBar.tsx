@@ -4,21 +4,14 @@ import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 import { useCallback } from "react"
 import { useAuth } from "@/features/auth/application/hooks/useAuth"
-import { useIsAdmin } from "@/features/admin/application/hooks/useIsAdmin"
 import NotificationBell from "@/features/notification/ui/components/NotificationBell"
 
 const NAV_ITEMS = [
     { href: "/", label: "HOME", exact: true },
     { href: "/dashboard", label: "DASHBOARD" },
     { href: "/market-feed", label: "MARKET_FEED" },
-    { href: "/news", label: "NEWS" },
-    { href: "/watchlist", label: "WATCHLIST" },
     { href: "/ai-insight", label: "AI_INSIGHT" },
-    { href: "/invest", label: "INVEST" },
-    { href: "/stock-recommendation", label: "PICKS" },
-    { href: "/stock-theme", label: "THEMES" },
     { href: "/board", label: "BOARD" },
-    { href: "/youtube", label: "YOUTUBE" },
 ]
 
 export default function TopBar() {
@@ -26,7 +19,6 @@ export default function TopBar() {
     const router = useRouter()
     const pathname = usePathname()
     const isLoggedIn = state.status === "AUTHENTICATED"
-    const isAdmin = useIsAdmin()
 
     const handleLogout = useCallback(async () => {
         await logout()
@@ -57,23 +49,11 @@ export default function TopBar() {
                             {label}
                         </Link>
                     ))}
-                    {isLoggedIn && isAdmin === true && (
-                        <Link
-                            href="/admin"
-                            className={
-                                pathname.startsWith("/admin")
-                                    ? "text-inverse-primary border-b-2 border-inverse-primary pb-1"
-                                    : "text-inverse-on-surface opacity-50 hover:opacity-100 hover:text-inverse-on-surface transition-none px-1"
-                            }
-                        >
-                            ADMIN
-                        </Link>
-                    )}
                 </nav>
             </div>
 
             <div className="flex items-center gap-2">
-                {isLoggedIn && state.status === "AUTHENTICATED" && (
+{isLoggedIn && state.status === "AUTHENTICATED" && (
                     <Link
                         href="/my"
                         className={`flex items-center gap-1.5 border px-2 py-0.5 font-mono text-[10px] tracking-widest max-w-[160px] sm:max-w-none transition-none ${
